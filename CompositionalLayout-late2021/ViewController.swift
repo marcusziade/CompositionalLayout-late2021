@@ -35,7 +35,7 @@ final class ViewController: UIViewController {
     }
     
     private var dataSource: UICollectionViewDiffableDataSource<Section, Int>! = nil
-        
+    
     private lazy var collectionView: UICollectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout).forAutoLayout()
         return view
@@ -138,10 +138,30 @@ extension ViewController {
                 let item = NSCollectionLayoutItem(layoutSize: itemSize)
                 item.contentInsets = .init(top: 8, leading: 8, bottom: 8, trailing: 8)
                 
-                let leadingGroup = NSCollectionLayoutGroup.vertical(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.5), heightDimension: .fractionalHeight(1.0)), subitem: item, count: 2)
-                let trailingGroup = NSCollectionLayoutGroup.vertical(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.5), heightDimension: .fractionalHeight(1.0)), subitem: item, count: 2)
+                let leadingGroup = NSCollectionLayoutGroup.vertical(
+                    layoutSize: NSCollectionLayoutSize(
+                        widthDimension: .fractionalWidth(0.5),
+                        heightDimension: .fractionalHeight(1.0)
+                    ),
+                    subitem: item,
+                    count: 2
+                )
+                let trailingGroup = NSCollectionLayoutGroup.vertical(
+                    layoutSize: NSCollectionLayoutSize(
+                        widthDimension: .fractionalWidth(0.5),
+                        heightDimension: .fractionalHeight(1.0)
+                    ),
+                    subitem: item,
+                    count: 2
+                )
                 
-                let nestedGroup = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(0.5)), subitems: [leadingGroup, trailingGroup])
+                let nestedGroup = NSCollectionLayoutGroup.horizontal(
+                    layoutSize: NSCollectionLayoutSize(
+                        widthDimension: .fractionalWidth(1.0),
+                        heightDimension: .fractionalHeight(0.5)
+                    ),
+                    subitems: [leadingGroup, trailingGroup]
+                )
                 
                 section = NSCollectionLayoutSection(group: nestedGroup)
                 section.contentInsets = .init(top: 0, leading: 8, bottom: 0, trailing: 8)
