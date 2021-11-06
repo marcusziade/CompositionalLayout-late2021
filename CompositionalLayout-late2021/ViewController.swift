@@ -99,10 +99,10 @@ extension ViewController {
 
 // MARK: - Layout
 
-extension ViewController {
+private extension ViewController {
     
-    private var layout: UICollectionViewLayout {
-        let sectionProvider = {
+    var layout: UICollectionViewLayout {
+        let sectionProvider = { [unowned self]
             (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
             
             let section: NSCollectionLayoutSection
@@ -113,65 +113,75 @@ extension ViewController {
             case .main:
                 let config = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
                 section = NSCollectionLayoutSection.list(using: config, layoutEnvironment: layoutEnvironment)
-                
             case .secondary:
-                let itemSize = NSCollectionLayoutSize(
-                    widthDimension: .fractionalWidth(1.0),
-                    heightDimension: .fractionalHeight(1.0)
-                )
-                let item = NSCollectionLayoutItem(layoutSize: itemSize)
-                
-                let groupSize = NSCollectionLayoutSize(
-                    widthDimension: .fractionalWidth(0.25),
-                    heightDimension: .fractionalHeight(0.1)
-                )
-                let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitem: item, count: 2)
-                
-                section = NSCollectionLayoutSection(group: group)
-                section.orthogonalScrollingBehavior = .groupPaging
-                
+                section = secondaryLayout
             case .grid:
-                let itemSize = NSCollectionLayoutSize(
-                    widthDimension: .fractionalWidth(1.0),
-                    heightDimension: .fractionalWidth(1.0)
-                )
-                let item = NSCollectionLayoutItem(layoutSize: itemSize)
-                item.contentInsets = .init(top: 8, leading: 8, bottom: 8, trailing: 8)
-                
-                let leadingGroup = NSCollectionLayoutGroup.vertical(
-                    layoutSize: NSCollectionLayoutSize(
-                        widthDimension: .fractionalWidth(0.5),
-                        heightDimension: .fractionalHeight(1.0)
-                    ),
-                    subitem: item,
-                    count: 2
-                )
-                let trailingGroup = NSCollectionLayoutGroup.vertical(
-                    layoutSize: NSCollectionLayoutSize(
-                        widthDimension: .fractionalWidth(0.5),
-                        heightDimension: .fractionalHeight(1.0)
-                    ),
-                    subitem: item,
-                    count: 2
-                )
-                
-                let nestedGroup = NSCollectionLayoutGroup.horizontal(
-                    layoutSize: NSCollectionLayoutSize(
-                        widthDimension: .fractionalWidth(1.0),
-                        heightDimension: .fractionalHeight(0.5)
-                    ),
-                    subitems: [leadingGroup, trailingGroup]
-                )
-                
-                section = NSCollectionLayoutSection(group: nestedGroup)
-                section.contentInsets = .init(top: 0, leading: 8, bottom: 0, trailing: 8)
-                section.interGroupSpacing = 24
+                section = gridLayout
             }
             
             return section
         }
         
         return UICollectionViewCompositionalLayout(sectionProvider: sectionProvider)
+    }
+    
+    var secondaryLayout: NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .fractionalHeight(1.0)
+        )
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(0.25),
+            heightDimension: .fractionalHeight(0.1)
+        )
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitem: item, count: 2)
+        
+        let section = NSCollectionLayoutSection(group: group)
+        section.orthogonalScrollingBehavior = .groupPaging
+        
+        return section
+    }
+    
+    var gridLayout: NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .fractionalWidth(1.0)
+        )
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        item.contentInsets = .init(top: 8, leading: 8, bottom: 8, trailing: 8)
+        
+        let leadingGroup = NSCollectionLayoutGroup.vertical(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(0.5),
+                heightDimension: .fractionalHeight(1.0)
+            ),
+            subitem: item,
+            count: 2
+        )
+        let trailingGroup = NSCollectionLayoutGroup.vertical(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(0.5),
+                heightDimension: .fractionalHeight(1.0)
+            ),
+            subitem: item,
+            count: 2
+        )
+        
+        let nestedGroup = NSCollectionLayoutGroup.horizontal(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1.0),
+                heightDimension: .fractionalHeight(0.5)
+            ),
+            subitems: [leadingGroup, trailingGroup]
+        )
+        
+        let section = NSCollectionLayoutSection(group: nestedGroup)
+        section.contentInsets = .init(top: 0, leading: 8, bottom: 0, trailing: 8)
+        section.interGroupSpacing = 24
+        
+        return section
     }
 }
 
