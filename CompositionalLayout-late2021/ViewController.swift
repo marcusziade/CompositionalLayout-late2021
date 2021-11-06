@@ -21,7 +21,9 @@ final class ViewController: UIViewController {
         ])
         
         configureDataSource()
-        applySnapshots()
+        applyInitialSnapshots()
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addMore))
     }
     
     // MARK: - Private
@@ -38,6 +40,16 @@ final class ViewController: UIViewController {
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout).forAutoLayout()
         return view
     }()
+    
+    @objc private func addMore() {
+        let sections = Section.allCases
+        var snapshot = NSDiffableDataSourceSnapshot<Section, Int>()
+        snapshot.appendSections(sections)
+        
+        var mainSnapshot = NSDiffableDataSourceSectionSnapshot<Int>()
+        mainSnapshot.append(Array(1...4) + Array(3000...3005))
+        dataSource.apply(mainSnapshot, to: .main)
+    }
 }
 
 // MARK: - Data Source
@@ -64,7 +76,7 @@ extension ViewController {
         }
     }
     
-    private func applySnapshots() {
+    private func applyInitialSnapshots() {
         let sections = Section.allCases
         var snapshot = NSDiffableDataSourceSnapshot<Section, Int>()
         snapshot.appendSections(sections)
